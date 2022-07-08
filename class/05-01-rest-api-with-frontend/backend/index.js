@@ -57,7 +57,7 @@ app.post("/tokens/phone", (req, res) => {
 
   // 3. 핸드폰번호에 토큰 전송
   sendTokenToSMS(req.body.phone, token);
-  res.send("인증완료!!");
+  res.send(`인증완료!!`);
 });
 
 app.listen(3000, () => {
