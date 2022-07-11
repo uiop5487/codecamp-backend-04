@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>signup</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const onClickApi = () => {
+        // 1. 입력한 핸드폰 번호 가져오기
+        const phone = document.getElementById("phone").value;
+        console.log(phone);
+        // 2. 해당 핸드폰 번호로 인증번호API 요청하기
+        axios
+          .post("http://localhost:3000/tokens/phone", {
+            phone: phone,
+          })
+          .then((res) => {
+            console.log(res);
+            document.getElementById("result").innerText = res.data;
+          });
+      };
+    </script>
+    <style>
+      button {
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: darkblue;
+        color: white;
+      }
+      .box {
+        box-shadow: 5px 5px 5px 5px #bdbdbd;
+        width: 300px;
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 100px;
+        padding-bottom: 100px;
+      }
+      #result {
+        display: flex;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <div>
+        <div>휴대폰 번호</div>
+        <input type="text" id="phone" />
+        <button onclick="onClickApi()">인증하기</button>
+      </div>
+      <div id="result">인증상태</div>
+      <button>등록하기</button>
+    </div>
+  </body>
+</html>
