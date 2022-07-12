@@ -3,7 +3,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { options } from "./swagger/config.js";
 import cors from "cors";
-import bodyParser from "body-parser";
+// import bodyParser from "body-parser";
 import { checkValidationPhone, getToken, sendTokenToSMS } from "./phone.js";
 import {
   checkValidationEmail,
@@ -15,8 +15,9 @@ const app = express();
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJsdoc(options)));
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
 
 app.post("/tokens/phone", (req, res) => {
   // 1. 휴대폰 번호 자릿수 확인
