@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  # 도커 컴퓨터 이름
+  my-backend:
+    # 빌드
+    build:
+      # 도커 파일의 위치
+      context: .
+      # 도커 파일의 이름
+      dockerfile: Dockerfile
+    # 로컬에 있는 파일을 도커에 있는 파일로 대체
+    volumes:
+      - ./index.js:/myfolder/index.js
+      - ./phone.js:/myfolder/phone.js
+    ports:
+      - 3000:3000
+
+  my-database:
+    image: mongo:5
+    ports:
+      - 27017:27017
