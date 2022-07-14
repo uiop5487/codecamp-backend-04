@@ -16,12 +16,11 @@ app.post("/tokens/phone", async (req, res) => {
     return;
   }
 
+  const result = await Phone.find({ phone: req.body.phone });
+
   const token = getToken();
 
-  const result = await Phone.find();
-  const isPhone = result.reduce((_, cur) => cur.phone === req.body.phone);
-  console.log();
-  if (isPhone) {
+  if (result[0]) {
     await Phone.updateOne({ phone: req.body.phone }, { token: token });
 
     sendTokenToSMS(req.body.phone, token);
@@ -41,17 +40,16 @@ app.post("/tokens/phone", async (req, res) => {
 });
 
 app.patch("/tokens/phone", async (req, res) => {
-  const result = await Phone.find();
-  const isPhone = result.reduce((_, cur) => cur.phone === req.body.phone);
-  if (!isPhone) {
+  const isPhone = await Phone.find({
+    phone: req.body.phone,
+    token: req.body.token,
+  });
+
+  if (!isPhone[0]) {
     res.send(false);
     return;
   }
-  const isToken = result.reduce((_, cur) => cur.token === req.body.token);
-  if (!isToken) {
-    res.send(false);
-    return;
-  }
+
   await Phone.updateOne({ phone: req.body.phone }, { isAuth: true });
 
   res.send(true);
