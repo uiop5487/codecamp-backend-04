@@ -41,3 +41,27 @@
  *          200:
  *              description: 성공
  */
+
+/**
+ *     tags: [Users]
+ *     responses:
+ *          200:
+ *              description: 성공
+ *              content:
+ *                  schema:
+ *                     type: object
+ *                     items:
+ *                         properties:
+ *                            massege:
+ *                                 type: string
+ *                                 example: 정상등록
+ *
+ *  *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  _id:
+ *                     type: string
+ *                     example: 62d02ae4ecc46183c252557c
+ */
