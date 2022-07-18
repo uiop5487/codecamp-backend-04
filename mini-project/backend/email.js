@@ -3,12 +3,13 @@ import nodemailer from "nodemailer";
 import "dotenv/config";
 
 export const checkValidationEmail = (email) => {
-  const arr = email.split(".")[0]?.split("@");
   if (email === undefined) {
     console.log("이메일이 없습니다!");
     return false;
   }
-  if (!email.includes("@") || !arr[0] || !arr[1]) {
+  const reg =
+    /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+  if (reg.test(email) === false) {
     console.log("이메일 형식이 맞지 않습니다!!");
     return false;
   }
