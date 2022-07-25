@@ -28,3 +28,7 @@ select p.name as "상품명", pc.name as "카테고리명"
   from product p, product_category pc 
  where p.productCategoryId = pc.id
 ;
+
+delete from product_category
+ where id = "e79f7920-0bf8-11ed-a3c7-2759485cf8c8"
+;
