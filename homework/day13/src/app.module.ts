@@ -10,7 +10,7 @@ import { StarbucksModule } from './apis/starbucks/starbucks.module';
     StarbucksModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: 'src/commos/graphql/schema.gql',
+      autoSchemaFile: 'src/commons/graphql/schema.gql',
     }),
     // TypeOrmModule.forRoot({
     //   type: process.env.DATABASE_TYPE as 'mysql',
