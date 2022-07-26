@@ -1,0 +1,85 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ProductMainCategory {
+  id: String!
+  name: String!
+}
+
+type ProductSubCategory {
+  id: String!
+  name: String!
+  maincategory: ProductMainCategory!
+}
+
+type ProductMainType {
+  id: String!
+  name: String!
+}
+
+type ProductSubType {
+  id: String!
+  name: String!
+  maintype: ProductMainType!
+}
+
+type ProductTag {
+  id: String!
+  name: String!
+  products: Product!
+}
+
+type Seller {
+  id: String!
+  name: String!
+  email: String!
+  password: String!
+  phone: String!
+  address: String!
+}
+
+type Product {
+  id: String!
+  name: String!
+  contents: String!
+  price: Int!
+  unit: String!
+  volume: String!
+  origin: String!
+  isSoldout: Boolean!
+  isBest: Boolean!
+  isNew: Boolean!
+  subCategory: ProductSubCategory!
+  subType: ProductSubType!
+  tags: [ProductTag!]!
+  seller: Seller!
+}
+
+type Query {
+  fetchProducts: [Product!]!
+  fetchProduct(productId: String!): Product!
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+}
+
+input CreateProductInput {
+  name: String!
+  contents: String!
+  price: Int!
+  unit: String!
+  volume: String!
+  origin: String!
+}
+
+input UpdateProductInput {
+  name: String
+  contents: String
+  price: Int
+  unit: String
+  volume: String
+  origin: String
+}
