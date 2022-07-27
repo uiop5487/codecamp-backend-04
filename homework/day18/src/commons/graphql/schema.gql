@@ -1,0 +1,111 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ProductMainCategory {
+  id: String!
+  name: String!
+}
+
+type ProductSubCategory {
+  id: String!
+  name: String!
+  maincategory: ProductMainCategory!
+}
+
+type ProductMainType {
+  id: String!
+  name: String!
+}
+
+type ProductSubType {
+  id: String!
+  name: String!
+  maintype: ProductMainType!
+}
+
+type ProductTag {
+  id: String!
+  name: String!
+  products: Product!
+}
+
+type Seller {
+  id: String!
+  name: String!
+  email: String!
+  password: String!
+  phone: String!
+  address: String!
+}
+
+type Product {
+  id: String!
+  name: String!
+  contents: String!
+  price: Int!
+  unit: String!
+  volume: String!
+  origin: String!
+  isSoldout: Boolean!
+  isBest: Boolean!
+  isNew: Boolean!
+  createdAt: DateTime!
+  category: ProductSubCategory!
+  type: ProductSubType!
+  tags: [ProductTag!]!
+  seller: Seller!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  fetchProducts: [Product!]!
+  fetchProduct(productId: String!): Product!
+  fetchProductWithDeleted: [Product!]!
+  fetchSellers: [Seller!]!
+  fetchSeller(sellerId: String!): Seller!
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  deleteProduct(productId: String!): Boolean!
+  restoreProduct(productId: String!): Boolean!
+  createSeller(createsellerInput: CreateSellerInput!): Seller!
+}
+
+input CreateProductInput {
+  name: String!
+  contents: String!
+  price: Int!
+  unit: String!
+  volume: String!
+  origin: String!
+  productCategoryId: String!
+  productTypeId: String!
+  sellerId: String!
+}
+
+input UpdateProductInput {
+  name: String
+  contents: String
+  price: Int
+  unit: String
+  volume: String
+  origin: String
+  productCategoryId: String
+  productTypeId: String
+  sellerId: String
+}
+
+input CreateSellerInput {
+  name: String!
+  email: String!
+  password: String!
+  phone: String!
+  address: String!
+}
