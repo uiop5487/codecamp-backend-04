@@ -50,11 +50,17 @@ type Product {
   isSoldout: Boolean!
   isBest: Boolean!
   isNew: Boolean!
+  createdAt: DateTime!
   subCategory: ProductSubCategory!
   subType: ProductSubType!
   tags: [ProductTag!]!
   seller: Seller!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Query {
   fetchProducts: [Product!]!
@@ -73,6 +79,7 @@ input CreateProductInput {
   unit: String!
   volume: String!
   origin: String!
+  createdAt: DateTime!
 }
 
 input UpdateProductInput {
@@ -82,4 +89,5 @@ input UpdateProductInput {
   unit: String
   volume: String
   origin: String
+  createdAt: DateTime
 }

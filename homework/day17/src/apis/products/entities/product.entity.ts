@@ -55,9 +55,9 @@ export class Product {
   @Field(() => Boolean)
   isNew: boolean;
 
-  // @Column()
-  // @Field(() => Date)
-  // createdAt: Date;
+  @Column()
+  @Field(() => Date)
+  createdAt: Date;
 
   @ManyToOne(() => ProductSubCategory)
   @Field(() => ProductSubCategory)

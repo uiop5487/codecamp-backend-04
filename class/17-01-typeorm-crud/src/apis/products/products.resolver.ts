@@ -2,11 +2,11 @@ import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { CreateProductInput } from './dto/createProduct.input';
 import { UpdateProductInput } from './dto/updateProduct.input';
 import { Product } from './entities/product.entity';
-import { ProductService } from './product.service';
+import { ProductServices } from './products.service';
 
 @Resolver()
-export class ProductResolver {
-  constructor(private readonly productService: ProductService) {}
+export class ProductResolvers {
+  constructor(private readonly productService: ProductServices) {}
 
   @Query(() => [Product])
   fetchProducts() {
