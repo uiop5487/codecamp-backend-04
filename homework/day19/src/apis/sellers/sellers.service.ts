@@ -25,7 +25,7 @@ export class SellerServices {
   }
 
   async create({ createSellerInput }) {
-    const email = this.sellerRepository.findOne({
+    const email = await this.sellerRepository.findOne({
       where: { email: createSellerInput.email },
     });
 

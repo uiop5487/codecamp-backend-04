@@ -5,11 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModules } from './apis/products/products.module';
 import { ConfigModule } from '@nestjs/config';
 import { SellerModule } from './apis/sellers/sellers.module';
+import { UsersModule } from './apis/users/users.module';
 
 @Module({
   imports: [
     ProductModules,
     SellerModule,
+    UsersModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',

@@ -22,6 +22,7 @@ export class ProductServices {
         'type.maintype',
         'category.maincategory',
         'seller',
+        'tags',
       ],
     });
   }
@@ -35,6 +36,7 @@ export class ProductServices {
         'type.maintype',
         'category.maincategory',
         'seller',
+        'tags',
       ],
     });
   }
@@ -48,6 +50,7 @@ export class ProductServices {
         'type.maintype',
         'category.maincategory',
         'seller',
+        'tags',
       ],
     });
   }
