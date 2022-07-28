@@ -16,14 +16,14 @@ export class ProductServices {
 
   async findAll() {
     return this.productRepository.find({
-      relations: ['productSaleslocation'],
+      relations: ['productSaleslocation', 'productCategory'],
     });
   }
 
   async findOne({ prodcutId }) {
     return this.productRepository.findOne({
       where: { id: prodcutId },
-      relations: ['productSaleslocation'],
+      relations: ['productSaleslocation', 'productCategory'],
     });
   }
 
@@ -39,7 +39,7 @@ export class ProductServices {
     // console.log(result);
 
     // 2. 상품과 상품거래위치 같이 등록
-    const { productSalesloaction, ...product } =
+    const { productSalesloaction, productCategoryId, ...product } =
       createProductInput;
 
     const result = await this.productSalesloacationRepository.save({
@@ -49,6 +49,7 @@ export class ProductServices {
     const result2 = await this.productRepository.save({
       ...product,
       productSaleslocation: result,
+      productCategory: { id: productCategoryId },
     });
 
     return result2;
