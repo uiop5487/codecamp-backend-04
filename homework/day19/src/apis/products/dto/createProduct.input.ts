@@ -1,6 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Min } from 'class-validator';
-import { ProductSaleslocationInput } from 'src/apis/productsSaleslocations/dto/productSaleslocation.input';
+import { ProductTag } from 'src/apis/productsTags/entities/productTag.entity';
 
 @InputType()
 export class CreateProductInput {
@@ -8,18 +8,30 @@ export class CreateProductInput {
   name: string;
 
   @Field(() => String)
-  description: string;
+  contents: string;
 
   @Min(0)
   @Field(() => Int)
   price: number;
 
-  @Field(() => ProductSaleslocationInput)
-  productSalesloaction: ProductSaleslocationInput;
+  @Field(() => String)
+  unit: string;
+
+  @Field(() => String)
+  volume: string;
+
+  @Field(() => String)
+  origin: string;
 
   @Field(() => String)
   productCategoryId: string;
 
+  @Field(() => String)
+  productTypeId: string;
+
+  @Field(() => String)
+  sellerId: string;
+
   @Field(() => [String])
-  productTags: string[];
+  tags: string[];
 }
