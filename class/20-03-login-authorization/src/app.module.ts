@@ -7,9 +7,11 @@ import { ConfigModule } from '@nestjs/config';
 import { ProductCategoriesModule } from './apis/productsCategories/productCategories.module';
 import { ProductModules } from './apis/products/products.module';
 import { UsersModule } from './apis/users/users.module';
+import { AuthsModule } from './apis/auths/auths.module';
 
 @Module({
   imports: [
+    AuthsModule,
     BoardsModule,
     ProductModules,
     ProductCategoriesModule,

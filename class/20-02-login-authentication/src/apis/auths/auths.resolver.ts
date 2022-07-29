@@ -27,5 +27,6 @@ export class AuthsResolver {
     if (!isAuth)
       throw new UnprocessableEntityException('비밀번호가 일치하지 않습니다.');
     // 4. 액세스 토큰 만들기
+    return this.authsService.getAccessToken({ user });
   }
 }

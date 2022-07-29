@@ -17,4 +17,10 @@ export class UsersService {
 
     return this.usersRepository.save({ email, password, name, age });
   }
+
+  findOne({ email }) {
+    return this.usersRepository.findOne({
+      where: { email },
+    });
+  }
 }
