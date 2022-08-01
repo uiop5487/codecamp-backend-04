@@ -6,6 +6,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
+import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strateg';
+import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
+import { AuthsController } from './auths.controller';
 
 @Module({
   imports: [
@@ -16,9 +19,14 @@ import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
   ],
   providers: [
     JwtAccessStrategy, //
+    JwtRefreshStrategy,
+    JwtGoogleStrategy,
     AuthsResolver, //
     AuthsService, //
     UsersServices,
+  ],
+  controllers: [
+    AuthsController, //
   ],
 })
 export class AuthsModule {}

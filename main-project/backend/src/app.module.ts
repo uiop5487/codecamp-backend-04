@@ -14,12 +14,13 @@ import { AuthsModule } from './apis/auths/auths.module';
     ProductModules,
     SellerModule,
     UsersModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
+      context: ({ req, res }) => ({ req, res }),
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',

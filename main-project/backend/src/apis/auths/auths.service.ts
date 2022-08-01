@@ -12,12 +12,16 @@ export class AuthsService {
       { email: user.email, sub: user.id },
       { secret: 'myRefreshKey', expiresIn: '2w' },
     );
+
+    console.log(refreshToken);
+
+    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
   }
 
   getAccessToken({ user }) {
     return this.jwtService.sign(
       { email: user.email, sub: user.id }, //
-      { secret: 'myAccessKey', expiresIn: '1h' },
+      { secret: 'myAccessKey', expiresIn: '20s' },
     );
   }
 }
