@@ -7,6 +7,8 @@ import { AuthsService } from './auths.service';
 import { User } from '../users/entites/user.entity';
 import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strateg';
 import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
+import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
+import { AuthsController } from './auths.controller';
 
 @Module({
   imports: [
@@ -18,9 +20,13 @@ import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
   providers: [
     JwtAccessStrategy,
     JwtRefreshStrategy,
+    JwtGoogleStrategy,
     AuthsResolver, //
     AuthsService, //
     UsersService,
+  ],
+  controllers: [
+    AuthsController, //
   ],
 })
 export class AuthsModule {}
