@@ -1,45 +1,39 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
-import { UsersServices } from '../users/users.service';
+import { IOAuthUser } from 'src/commons/type/context';
 import { AuthsService } from './auths.service';
 
-interface IOAuthUser {
-  user: {
-    email: string;
-    hashedPassword: string;
-    name: string;
-    phone: string;
-    address: string;
-    rank: string;
-  };
-}
-
-@Controller()
+@Controller('login')
 export class AuthsController {
   constructor(
-    private readonly usersService: UsersServices, //
-    private readonly authsService: AuthsService,
+    private readonly authsService: AuthsService, //
   ) {}
 
-  @Get('/login/google')
+  @Get('google')
   @UseGuards(AuthGuard('google'))
   async loginGoogle(
     @Req() req: Request & IOAuthUser, //
     @Res() res: Response,
   ) {
-    let user = await this.usersService.findEmail({ email: req.user.email });
+    this.authsService.sosialLogin({ req, res });
+  }
 
-    if (!user)
-      user = await this.usersService.create({
-        createUserInput: req.user,
-        hashedPassword: req.user.hashedPassword,
-      });
+  @Get('kakao')
+  @UseGuards(AuthGuard('kakao'))
+  async loginKaKao(
+    @Req() req: Request & IOAuthUser, //
+    @Res() res: Response,
+  ) {
+    this.authsService.sosialLogin({ req, res });
+  }
 
-    this.authsService.setRefreshToken({ user, res });
-
-    res.redirect(
-      'http://localhost:5500/main-project/frontend/login/index.html',
-    );
+  @Get('naver')
+  @UseGuards(AuthGuard('naver'))
+  async loginNaver(
+    @Req() req: Request & IOAuthUser, //
+    @Res() res: Response,
+  ) {
+    this.authsService.sosialLogin({ req, res });
   }
 }

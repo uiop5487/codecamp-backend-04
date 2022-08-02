@@ -9,6 +9,8 @@ import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
 import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strateg';
 import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
 import { AuthsController } from './auths.controller';
+import { JwtKaKaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
+import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { AuthsController } from './auths.controller';
     JwtAccessStrategy, //
     JwtRefreshStrategy,
     JwtGoogleStrategy,
+    JwtKaKaoStrategy,
+    JwtNaverStrategy,
     AuthsResolver, //
     AuthsService, //
     UsersServices,
