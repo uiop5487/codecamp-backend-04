@@ -38,7 +38,7 @@ export class User {
 
   @Column({ nullable: true })
   @Field(() => String)
-  amount: string;
+  point: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Field(() => Date)

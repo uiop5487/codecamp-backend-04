@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>결제 만들기</title>
+  </head>
+  <script
+    type="text/javascript"
+    src="https://code.jquery.com/jquery-1.12.4.min.js"
+  ></script>
+  <!-- iamport.payment.js -->
+  <script
+    type="text/javascript"
+    src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"
+  ></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    const requestPay = () => {
+      const name = document.getElementById("name").innerText;
+      const amount = document.getElementById("amount").value;
+
+      const IMP = window.IMP; // 생략 가능
+      IMP.init("imp78525002");
+
+      IMP.request_pay(
+        {
+          pg: "html5_inicis",
+          pay_method: "card",
+          name: name,
+          amount: amount,
+          buyer_email: "gildong@gmail.com",
+          buyer_name: "홍길동",
+          buyer_tel: "010-4242-4242",
+          buyer_addr: "서울특별시 강남구 신사동",
+          buyer_postcode: "01181",
+        },
+        (rsp) => {
+          // callback
+          if (rsp.success) {
+            // 결제 성공 시 로직,
+            console.log(rsp);
+
+            axios.post(
+              "http://localhost:3000/graphql",
+              {
+                query: `
+                mutation {
+                  createPointTransaction(
+                    impUid: "${rsp.imp_uid}",
+                    amount: ${rsp.paid_amount}
+                  ) {
+                    id
+                  }
+                }
+                `,
+              },
+              {
+                headers: {
+                  Authorization:
+                    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Inp4Y0B6eGMuY29tIiwic3ViIjoiMjU2NGMzNzktMzk5My00MGFlLTliM2QtMzViOTcyMDI3NDU1IiwiaWF0IjoxNjU5NjA3MjUyLCJleHAiOjE2NTk2MTA4NTJ9.EDzcXcisGaB5SKz7Oq031Tvv0kAMkXC9MrwSqSvuz54",
+                },
+              }
+            );
+            alert("결제 성공이요!");
+          } else {
+            // 결제 실패 시 로직,
+            alert("결제 실패요!");
+          }
+        }
+      );
+    };
+  </script>
+  <body>
+    <div
+      style="
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        style="
+          width: 200px;
+          height: 200px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-around;
+          box-shadow: 5px 5px 5px 5px;
+        "
+      >
+        <div>
+          상품이름 :
+          <span id="name">마우스</span><br />
+        </div>
+        <div style="display: flex; flex-direction: column">
+          <span>결제금액 </span><input id="amount" />
+        </div>
+        <button onclick="requestPay()">결제하기</button>
+      </div>
+    </div>
+  </body>
+</html>

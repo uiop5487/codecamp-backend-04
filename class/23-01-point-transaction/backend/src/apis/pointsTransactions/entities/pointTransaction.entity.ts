@@ -1,11 +1,11 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { User } from 'src/apis/users/entities/user.entity';
+import { User } from 'src/apis/users/entites/user.entity';
 import {
-  Column,
-  CreateDateColumn,
   Entity,
-  ManyToOne,
+  Column,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 
 export enum POINT_TRANSACTION_STATUS_ENUM {
@@ -19,24 +19,28 @@ registerEnumType(POINT_TRANSACTION_STATUS_ENUM, {
 
 @Entity()
 @ObjectType()
-export class PointCharge {
+export class PointTransaction {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
 
   @Column()
+  @Field(() => String)
+  impUid: string;
+
+  @Column()
   @Field(() => Int)
-  price: number;
+  amount: number;
 
   @Column({ type: 'enum', enum: POINT_TRANSACTION_STATUS_ENUM })
-  @Field(() => String)
+  @Field(() => POINT_TRANSACTION_STATUS_ENUM)
   status: string;
-
-  @CreateDateColumn()
-  @Field(() => Date)
-  createdAt: Date;
 
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 }
