@@ -37,8 +37,8 @@ export class User {
   rank: string;
 
   @Column({ nullable: true })
-  @Field(() => String)
-  point: string;
+  @Field(() => Int)
+  point: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Field(() => Date)

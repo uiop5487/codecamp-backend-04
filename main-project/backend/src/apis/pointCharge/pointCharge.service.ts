@@ -35,10 +35,17 @@ export class PointChargeService {
     // 3. 유저의 돈 업데이트
     this.userRepository.update(
       { id: _user.id },
-      { point: user.point + amount },
+      { point: Number(user.point) + Number(amount) },
     );
 
     // 4. 최종결과 프론트엔드에 돌려주기
     return pointTransaction;
+  }
+
+  async findPayment({ impUid }) {
+    const result = await this.pointsChargeRepository.findOne({
+      where: { impUid: impUid },
+    });
+    return result;
   }
 }

@@ -68,7 +68,7 @@ type User {
   phone: String!
   address: String!
   rank: String!
-  point: String!
+  point: Int!
   createdAt: DateTime!
 }
 
@@ -99,6 +99,7 @@ type Mutation {
   deleteProduct(productId: String!): Boolean!
   restoreProduct(productId: String!): Boolean!
   createPointCharge(impUid: String!, amount: Int!): PointCharge!
+  cancelPoint(impUid: String!): PointCharge!
   createSeller(createsellerInput: CreateSellerInput!): Seller!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(userEmail: String!, password: String!, updateUserInput: UpdateUserInput!): User!

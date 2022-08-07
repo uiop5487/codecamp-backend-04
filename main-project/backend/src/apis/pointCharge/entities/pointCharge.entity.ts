@@ -32,6 +32,9 @@ export class PointCharge {
   @Field(() => String)
   status: string;
 
+  @Column()
+  impUid: string;
+
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
