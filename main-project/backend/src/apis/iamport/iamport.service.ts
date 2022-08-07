@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { Repository } from 'typeorm';
@@ -20,9 +20,8 @@ export class IamportService {
       method: 'post', // POST method
       headers: { 'Content-Type': 'application/json' }, // "Content-Type": "application/json"
       data: {
-        imp_key: '5018380331276616', // REST API키
-        imp_secret:
-          'OwFWjlrvKNC04pL4SobwG7bJs5ZtBquY7Zr07BD9JgmfbzeZzmRmK2bDknAptqJjiLfjPW6AaW3ircwy', // REST API Secret
+        imp_key: process.env.IMP_KEY, // REST API키
+        imp_secret: process.env.IMP_SECRET, // REST API Secret
       },
     });
 
@@ -49,7 +48,9 @@ export class IamportService {
 
   async cancelPayment({ impUid, token, user }) {
     const result = await this.checkPayment({ token, impUid });
-    console.log(result.data.response.amount);
+
+    if (result.data.response.status === 'cancelled')
+      throw new UnprocessableEntityException('이미 환불 되었습니다.');
 
     const getCancelData = axios({
       url: 'https://api.iamport.kr/payments/cancel',
@@ -70,8 +71,6 @@ export class IamportService {
         console.log(error);
         return error;
       });
-
-    console.log(getCancelData);
 
     const payment = await this.pointChargeRepository.findOne({
       where: { impUid: impUid },

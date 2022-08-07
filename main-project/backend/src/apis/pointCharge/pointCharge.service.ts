@@ -44,7 +44,9 @@ export class PointChargeService {
 
   async findPayment({ impUid }) {
     const result = await this.pointsChargeRepository.findOne({
+      relations: ['user'],
       where: { impUid: impUid },
+      order: { id: 'DESC' },
     });
     return result;
   }

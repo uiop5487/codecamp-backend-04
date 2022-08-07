@@ -7,14 +7,19 @@ import { Args, Context, Int, Mutation, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/type/context';
 import { IamportService } from '../iamport/iamport.service';
-import { PointCharge } from './entities/pointCharge.entity';
+import { UsersServices } from '../users/users.service';
+import {
+  PointCharge,
+  POINT_TRANSACTION_STATUS_ENUM,
+} from './entities/pointCharge.entity';
 import { PointChargeService } from './pointCharge.service';
 
 @Resolver()
 export class PointChargeResolver {
   constructor(
     private readonly pointsTransctionsService: PointChargeService, //
-    private readonly iamportService: IamportService,
+    private readonly iamportService: IamportService, //
+    private readonly usersService: UsersServices,
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
@@ -48,11 +53,17 @@ export class PointChargeResolver {
     @Args('impUid') impUid: string, //
     @Context() context: IContext,
   ) {
-    const result = await this.pointsTransctionsService.findPayment({ impUid });
-    if (result.status === 'CANCEL')
-      throw new UnprocessableEntityException('이미 환불되었습니다.');
-
     const user = context.req.user;
+
+    const result = await this.pointsTransctionsService.findPayment({ impUid });
+
+    if (result.status === POINT_TRANSACTION_STATUS_ENUM.CANCEL)
+      throw new UnprocessableEntityException('이미 환불 되었습니다.');
+
+    const isUser = await this.usersService.findEmail({ email: user.email });
+
+    if (isUser.id !== result.user.id)
+      throw new UnprocessableEntityException('유저정보가 일치하지 않습니다.');
 
     const token = await this.iamportService.createrIamportAccessToken();
 
