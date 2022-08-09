@@ -23,6 +23,9 @@ export class CreateProductInput {
   @Field(() => String)
   origin: string;
 
+  @Field(() => [String])
+  productImage: string[];
+
   @Field(() => String)
   productCategoryId: string;
 

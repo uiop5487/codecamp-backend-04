@@ -6,7 +6,9 @@ import { ProductServices } from './products.service';
 
 @Resolver()
 export class ProductResolvers {
-  constructor(private readonly productServices: ProductServices) {}
+  constructor(
+    private readonly productServices: ProductServices, //
+  ) {}
 
   @Query(() => [Product])
   fetchProducts() {

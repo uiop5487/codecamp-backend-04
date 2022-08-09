@@ -6,6 +6,7 @@ import {
   PointCharge,
   POINT_TRANSACTION_STATUS_ENUM,
 } from '../pointCharge/entities/pointCharge.entity';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class IamportService {
@@ -29,7 +30,6 @@ export class IamportService {
   }
 
   async checkPayment({ token, impUid }) {
-    console.log(impUid);
     const result = axios
       .get(`https://api.iamport.kr/payments/${impUid}`, {
         headers: {
@@ -46,41 +46,29 @@ export class IamportService {
     return result;
   }
 
-  async cancelPayment({ impUid, token, user }) {
-    const result = await this.checkPayment({ token, impUid });
+  async cancelPayment({ impUid, token }) {
+    try {
+      const result = await this.checkPayment({ token, impUid });
 
-    if (result.data.response.status === 'cancelled')
-      throw new UnprocessableEntityException('이미 환불 되었습니다.');
+      if (result.data.response.status === 'cancelled')
+        throw new UnprocessableEntityException('이미 환불 되었습니다.');
 
-    const getCancelData = axios({
-      url: 'https://api.iamport.kr/payments/cancel',
-      method: 'post',
-      headers: {
-        Authorization: token, // 아임포트 서버로부터 발급받은 엑세스 토큰
-      },
-      data: {
-        reason: '아무이유 없음', // 가맹점 클라이언트로부터 받은 환불사유
-        imp_uid: impUid, // imp_uid를 환불 `unique key`로 입력
-        amount: result.data.response.amount, // 가맹점 클라이언트로부터 받은 환불금액
-      },
-    })
-      .then((res) => {
-        return res;
-      })
-      .catch((error) => {
-        console.log(error);
-        return error;
+      const cancelData = await axios({
+        url: 'https://api.iamport.kr/payments/cancel',
+        method: 'post',
+        headers: {
+          Authorization: token, // 아임포트 서버로부터 발급받은 엑세스 토큰
+        },
+        data: {
+          reason: '아무이유 없음', // 가맹점 클라이언트로부터 받은 환불사유
+          imp_uid: impUid, // imp_uid를 환불 `unique key`로 입력
+          amount: result.data.response.amount, // 가맹점 클라이언트로부터 받은 환불금액
+        },
       });
 
-    const payment = await this.pointChargeRepository.findOne({
-      where: { impUid: impUid },
-    });
-
-    return this.pointChargeRepository.save({
-      price: -payment.price,
-      impUid: payment.impUid,
-      user: user,
-      status: POINT_TRANSACTION_STATUS_ENUM.CANCEL,
-    });
+      return cancelData.data.response.amount;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

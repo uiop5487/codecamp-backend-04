@@ -1,10 +1,5 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModules } from './apis/products/products.module';
@@ -13,7 +8,7 @@ import { SellerModule } from './apis/sellers/sellers.module';
 import { UsersModule } from './apis/users/users.module';
 import { AuthsModule } from './apis/auths/auths.module';
 import { PointChargeModule } from './apis/pointCharge/pointCharge.module';
-
+import { FilesModule } from './apis/files/files.module';
 @Module({
   imports: [
     AuthsModule,
@@ -21,6 +16,7 @@ import { PointChargeModule } from './apis/pointCharge/pointCharge.module';
     PointChargeModule,
     SellerModule,
     UsersModule,
+    FilesModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

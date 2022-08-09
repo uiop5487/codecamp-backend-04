@@ -67,6 +67,8 @@ export class PointChargeResolver {
 
     const token = await this.iamportService.createrIamportAccessToken();
 
-    return this.iamportService.cancelPayment({ impUid, token, user });
+    const amount = await this.iamportService.cancelPayment({ impUid, token });
+
+    return this.pointsTransctionsService.createCancle({ user, amount, impUid });
   }
 }

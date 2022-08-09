@@ -1,6 +1,7 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ProductImageService } from '../productsImage/productImage.service';
 import { ProductTag } from '../productsTags/entities/productTag.entity';
 import { Product } from './entities/product.entity';
 
@@ -12,6 +13,8 @@ export class ProductServices {
 
     @InjectRepository(ProductTag)
     private readonly productTagRepository: Repository<ProductTag>,
+
+    private readonly productImageService: ProductImageService,
   ) {}
 
   async findAll() {
@@ -23,6 +26,7 @@ export class ProductServices {
         'category.maincategory',
         'seller',
         'tags',
+        'productImage',
       ],
     });
   }
@@ -37,6 +41,7 @@ export class ProductServices {
         'category.maincategory',
         'seller',
         'tags',
+        'productImage',
       ],
     });
   }
@@ -51,6 +56,7 @@ export class ProductServices {
         'category.maincategory',
         'seller',
         'tags',
+        'productImage',
       ],
     });
   }
@@ -84,7 +90,17 @@ export class ProductServices {
       tags: productTags,
     });
 
-    return result2;
+    const aaa = await this.productImageService.createImage({
+      image: createProductInput.productImage,
+      product: result2,
+    });
+
+    console.log(aaa);
+
+    return {
+      ...result2,
+      productImage: createProductInput.productImage,
+    };
   }
 
   async update({ productId, updateProductInput }) {
@@ -92,13 +108,23 @@ export class ProductServices {
       where: { id: productId },
     });
 
-    const result = this.prdouctRepository.save({
+    const image = await this.productImageService.updateImage({
+      image: updateProductInput.productImage,
+      product: product,
+    });
+
+    const find = await this.productImageService.findImage({ image });
+
+    const result = await this.prdouctRepository.save({
       ...product,
       id: productId,
       ...updateProductInput,
     });
 
-    return result;
+    return {
+      ...result,
+      productImage: find,
+    };
   }
 
   async checkSoldOut({ productId }) {
@@ -118,5 +144,9 @@ export class ProductServices {
   async restore({ productId }) {
     const retoreResopnse = await this.prdouctRepository.restore(productId);
     return retoreResopnse.affected ? true : false;
+  }
+
+  async asd({ image, product }) {
+    this.productImageService.updateImage({ image, product });
   }
 }
