@@ -63,7 +63,13 @@ export class ProductImageService {
     return result;
   }
 
-  async findImage({ image }) {
+  async changeImage({ image }) {
     return image.map((el) => el.url);
+  }
+
+  async findImage({ productId }) {
+    return await this.productImageRepository.find({
+      where: { product: { id: productId } },
+    });
   }
 }

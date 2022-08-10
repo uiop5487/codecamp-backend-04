@@ -108,12 +108,18 @@ export class ProductServices {
       where: { id: productId },
     });
 
-    const image = await this.productImageService.updateImage({
-      image: updateProductInput.productImage,
-      product: product,
-    });
+    let find: any;
 
-    const find = await this.productImageService.findImage({ image });
+    if (updateProductInput.productImage) {
+      const image = await this.productImageService.updateImage({
+        image: updateProductInput.productImage,
+        product: product,
+      });
+
+      find = await this.productImageService.changeImage({ image });
+    } else {
+      find = await this.productImageService.findImage({ productId });
+    }
 
     const result = await this.prdouctRepository.save({
       ...product,
