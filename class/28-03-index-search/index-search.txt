@@ -1,0 +1,48 @@
+# 데이터 전체 개수 확인
+SELECT count(*) from board
+;
+
+# "0.9570875409590895"
+
+# 쿼리 검색 속도 비교
+SELECT *
+  from board
+ WHERE title = "0.9570875409590895"
+;
+SELECT *
+  from board
+ WHERE `number` = 897
+;
+
+# 옵티마이저 실행계획 확인
+explain 
+SELECT *
+  from board
+ WHERE title = "0.9570875409590895"
+;
+explain
+SELECT *
+  from board
+ WHERE `number` = 897
+;
+
+# 인덱스를 가지고 있는 컬럼 확인
+show index from board
+;
+
+# 인덱스 생성(이름은 아무거나 상관 없지만 관례로 만들어줌)
+CREATE index idx_title on board(title)
+;
+
+# 옵티마이저 실행계획 확인
+explain
+SELECT *
+  from board
+ WHERE title = "0.9570875409590895"
+;
+
+# 인덱싱된 컬럼으로 재쿼리후 성능 확인
+SELECT *
+  from board
+ WHERE title = "0.9570875409590895"
+;

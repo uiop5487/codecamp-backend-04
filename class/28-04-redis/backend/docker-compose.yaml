@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  # 도커 컴퓨터 이름
+  my-backend:
+    # 빌드
+    build:
+      # 도커 파일의 위치
+      context: .
+      # 도커 파일의 이름
+      dockerfile: Dockerfile
+    # 로컬에 있는 파일을 도커에 있는 파일로 대체
+    volumes:
+      - ./src:/myfolder/src
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env.docker
+
+  my-database:
+    platform: linux/x86_64
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: 'mydocker04'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - 3306:3306
+
+  my-redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
