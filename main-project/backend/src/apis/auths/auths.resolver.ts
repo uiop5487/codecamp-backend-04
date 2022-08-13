@@ -4,13 +4,19 @@ import { UsersServices } from '../users/users.service';
 import { AuthsService } from './auths.service';
 import * as bcrypt from 'bcrypt';
 import { IContext } from 'src/commons/type/context';
-import { GqlAuthRefreshGuard } from 'src/commons/auth/gql-auth.guard';
+import {
+  GqlAuthAccessGuard,
+  GqlAuthRefreshGuard,
+} from 'src/commons/auth/gql-auth.guard';
+import { Cache } from 'cache-manager';
 
 @Resolver()
 export class AuthsResolver {
   constructor(
     private readonly authsService: AuthsService, //
     private readonly usersService: UsersServices,
+
+    private readonly cacheManager: Cache,
   ) {}
 
   @Mutation(() => String)
@@ -32,6 +38,14 @@ export class AuthsResolver {
     this.authsService.setRefreshToken({ user, res: context.res });
 
     return this.authsService.getAccessToken({ user });
+  }
+
+  @Mutation(() => String)
+  @UseGuards(GqlAuthAccessGuard)
+  logout(
+    @Context() context: any, //
+  ) {
+    console.log(context);
   }
 
   @UseGuards(GqlAuthRefreshGuard)
