@@ -94,6 +94,7 @@ type Query {
 
 type Mutation {
   login(email: String!, password: String!): String!
+  logout: String!
   restoreAccessToken: String!
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
