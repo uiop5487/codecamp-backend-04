@@ -58,30 +58,32 @@ export class AuthsService {
       const currentDate = new Date();
       const sec = Math.abs(currentDate.getTime() / 1000);
 
-      const decodedAccessToken: any = jwt.verify(accessToken, 'myAccessKey');
-      console.log(decodedAccessToken);
-      const currentTtl = decodedAccessToken.exp - Math.ceil(sec);
+      const decodedAccessToken = jwt.verify(accessToken, 'myAccessKey');
 
-      await this.cacheManager.set(
-        `accessToken:${accessToken}`,
-        { logout: true },
-        {
-          ttl: currentTtl,
-        },
-      );
+      if (typeof decodedAccessToken !== 'string') {
+        const currentTtl = decodedAccessToken.exp - Math.ceil(sec);
 
-      const decodedRefreshToken: any = jwt.verify(refreshToken, 'myRefreshKey');
-      const currentRefreshTtl = decodedRefreshToken.exp - Math.ceil(sec);
+        await this.cacheManager.set(
+          `accessToken:${accessToken}`,
+          { logout: true },
+          {
+            ttl: currentTtl,
+          },
+        );
+      }
 
-      console.log(currentRefreshTtl);
+      const decodedRefreshToken = jwt.verify(refreshToken, 'myRefreshKey');
+      if (typeof decodedRefreshToken !== 'string') {
+        const currentRefreshTtl = decodedRefreshToken.exp - Math.ceil(sec);
 
-      await this.cacheManager.set(
-        `refreshToken:${refreshToken}`,
-        { logout: true },
-        {
-          ttl: currentRefreshTtl,
-        },
-      );
+        await this.cacheManager.set(
+          `refreshToken:${refreshToken}`,
+          { logout: true },
+          {
+            ttl: currentRefreshTtl,
+          },
+        );
+      }
 
       return '로그아웃이 되었습니다.';
     } catch (err) {
