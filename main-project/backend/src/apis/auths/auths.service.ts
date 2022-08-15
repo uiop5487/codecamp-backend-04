@@ -1,12 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  CACHE_MANAGER,
+  Inject,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersServices } from '../users/users.service';
+import * as jwt from 'jsonwebtoken';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class AuthsService {
   constructor(
     private readonly jwtService: JwtService, //
     private readonly usersService: UsersServices,
+
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   setRefreshToken({ user, res }) {
@@ -41,5 +51,41 @@ export class AuthsService {
     res.redirect(
       'http://localhost:5500/main-project/frontend/login/index.html',
     );
+  }
+
+  async checkToken({ accessToken, refreshToken }) {
+    try {
+      const currentDate = new Date();
+      const sec = Math.abs(currentDate.getTime() / 1000);
+
+      const decodedAccessToken: any = jwt.verify(accessToken, 'myAccessKey');
+      console.log(decodedAccessToken);
+      const currentTtl = decodedAccessToken.exp - Math.ceil(sec);
+
+      await this.cacheManager.set(
+        `accessToken:${accessToken}`,
+        { logout: true },
+        {
+          ttl: currentTtl,
+        },
+      );
+
+      const decodedRefreshToken: any = jwt.verify(refreshToken, 'myRefreshKey');
+      const currentRefreshTtl = decodedRefreshToken.exp - Math.ceil(sec);
+
+      console.log(currentRefreshTtl);
+
+      await this.cacheManager.set(
+        `refreshToken:${refreshToken}`,
+        { logout: true },
+        {
+          ttl: currentRefreshTtl,
+        },
+      );
+
+      return '로그아웃이 되었습니다.';
+    } catch (err) {
+      throw new UnauthorizedException(err);
+    }
   }
 }

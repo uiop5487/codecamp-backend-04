@@ -1,10 +1,4 @@
-import {
-  CACHE_MANAGER,
-  Inject,
-  UnauthorizedException,
-  UnprocessableEntityException,
-  UseGuards,
-} from '@nestjs/common';
+import { UnprocessableEntityException, UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { UsersServices } from '../users/users.service';
 import { AuthsService } from './auths.service';
@@ -15,16 +9,12 @@ import {
   GqlAuthRefreshGuard,
 } from 'src/commons/auth/gql-auth.guard';
 import { Cache } from 'cache-manager';
-import * as jwt from 'jsonwebtoken';
 
 @Resolver()
 export class AuthsResolver {
   constructor(
     private readonly authsService: AuthsService, //
     private readonly usersService: UsersServices,
-
-    @Inject(CACHE_MANAGER)
-    private readonly cacheManager: Cache,
   ) {}
 
   @Mutation(() => String)
@@ -58,35 +48,13 @@ export class AuthsResolver {
         'Bearer ',
         '',
       );
-
-      jwt.verify(accessToken, 'myAccessKey');
-
       const refreshToken = context.req.headers.cookie.replace(
         'refreshToken=',
         '',
       );
-      jwt.verify(refreshToken, 'myRefreshKey');
 
-      await this.cacheManager.set(
-        `accessToken:${accessToken}`,
-        { logout: true },
-        {
-          ttl: 3600,
-        },
-      );
-
-      await this.cacheManager.set(
-        `refreshToken:${refreshToken}`,
-        { logout: true },
-        {
-          ttl: 1209600,
-        },
-      );
-
-      return '로그아웃이 되었습니다.';
-    } catch (err) {
-      throw new UnauthorizedException('토큰이 유효하지 않습니다.');
-    }
+      return this.authsService.checkToken({ accessToken, refreshToken });
+    } catch (err) {}
   }
 
   @UseGuards(GqlAuthRefreshGuard)
