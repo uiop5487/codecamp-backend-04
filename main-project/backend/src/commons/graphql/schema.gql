@@ -82,7 +82,7 @@ type PointCharge {
 }
 
 type Query {
-  fetchProducts: [Product!]!
+  fetchProducts(search: String): [Product!]!
   fetchProduct(productId: String!): Product!
   fetchProductWithDeleted: [Product!]!
   fetchSellers: [Seller!]!

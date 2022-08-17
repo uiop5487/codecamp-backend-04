@@ -1,9 +1,16 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Cache } from 'cache-manager';
 import { Repository } from 'typeorm';
 import { ProductImageService } from '../productsImage/productImage.service';
 import { ProductTag } from '../productsTags/entities/productTag.entity';
 import { Product } from './entities/product.entity';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
 
 @Injectable()
 export class ProductServices {
@@ -15,7 +22,55 @@ export class ProductServices {
     private readonly productTagRepository: Repository<ProductTag>,
 
     private readonly productImageService: ProductImageService,
+
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
+
+    private readonly elasticsearchService: ElasticsearchService,
   ) {}
+
+  async findRedis({ search }) {
+    const result = await this.cacheManager.get(search);
+    console.log(result);
+    return result;
+  }
+
+  async findElastic({ search }) {
+    const result: any = await this.elasticsearchService.search({
+      index: 'myproduct',
+      _source: [
+        'unit',
+        'isbest',
+        'isnew',
+        'name',
+        'contents',
+        'volume',
+        'price',
+        'origin',
+        'id',
+        'issoldout',
+      ],
+      query: {
+        match: {
+          contents: search,
+        },
+      },
+    });
+
+    const result2 = result.hits.hits.map((el) => {
+      return el._source;
+    });
+
+    await this.cacheManager.set(
+      `${search}`,
+      { result2 },
+      {
+        ttl: 100000000000,
+      },
+    );
+
+    return result2;
+  }
 
   async findAll() {
     return this.prdouctRepository.find({
@@ -26,7 +81,6 @@ export class ProductServices {
         'category.maincategory',
         'seller',
         'tags',
-        'productImage',
       ],
     });
   }

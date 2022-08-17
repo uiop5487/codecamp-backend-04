@@ -11,8 +11,22 @@ export class ProductResolvers {
   ) {}
 
   @Query(() => [Product])
-  fetchProducts() {
-    return this.productServices.findAll();
+  async fetchProducts(
+    @Args({ name: 'search', nullable: true }) search: string, //
+  ) {
+    const isRedis = await this.productServices.findRedis({ search });
+
+    console.log(isRedis);
+
+    // if (isRedis !== null) return isRedis;
+
+    const iselastic = await this.productServices.findElastic({ search });
+
+    console.log(iselastic);
+
+    return iselastic;
+
+    // return this.productServices.findAll();
   }
 
   @Query(() => Product)

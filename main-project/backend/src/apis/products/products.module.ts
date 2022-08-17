@@ -7,6 +7,7 @@ import { ProductTag } from '../productsTags/entities/productTag.entity';
 import { Product } from './entities/product.entity';
 import { ProductResolvers } from './products.resolver';
 import { ProductServices } from './products.service';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 @Module({
   imports: [
@@ -16,6 +17,9 @@ import { ProductServices } from './products.service';
       ProductTag,
       ProductImage,
     ]),
+    ElasticsearchModule.register({
+      node: 'http://elasticsearch:9200',
+    }),
   ],
   providers: [
     ProductResolvers, //
