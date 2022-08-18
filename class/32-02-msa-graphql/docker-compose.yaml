@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./api-gateway/src:/api-gateway/src
+    ports:
+      - 3000:3000
 
   auth-service:
     build:
