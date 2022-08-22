@@ -23,18 +23,18 @@ export class CreateProductInput {
   @Field(() => String)
   origin: string;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   productImage: string[];
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   productCategoryId: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   productTypeId: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   sellerId: string;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   tags: string[];
 }

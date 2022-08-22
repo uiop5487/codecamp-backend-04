@@ -31,7 +31,6 @@ export class ProductServices {
 
   async findRedis({ search }) {
     const result = await this.cacheManager.get(search);
-    console.log(result);
     return result;
   }
 
@@ -61,13 +60,9 @@ export class ProductServices {
       return el._source;
     });
 
-    await this.cacheManager.set(
-      `${search}`,
-      { result2 },
-      {
-        ttl: 100000000000,
-      },
-    );
+    await this.cacheManager.set(`${search}`, result2, {
+      ttl: 10000,
+    });
 
     return result2;
   }

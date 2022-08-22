@@ -18,15 +18,13 @@ export class ProductResolvers {
 
     console.log(isRedis);
 
-    // if (isRedis !== null) return isRedis;
+    if (isRedis !== null) return isRedis;
 
     const iselastic = await this.productServices.findElastic({ search });
 
     console.log(iselastic);
 
     return iselastic;
-
-    // return this.productServices.findAll();
   }
 
   @Query(() => Product)

@@ -118,11 +118,11 @@ input CreateProductInput {
   unit: String!
   volume: String!
   origin: String!
-  productImage: [String!]!
-  productCategoryId: String!
-  productTypeId: String!
-  sellerId: String!
-  tags: [String!]!
+  productImage: [String!]
+  productCategoryId: String
+  productTypeId: String
+  sellerId: String
+  tags: [String!]
 }
 
 input UpdateProductInput {
