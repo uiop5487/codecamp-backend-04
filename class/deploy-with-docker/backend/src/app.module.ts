@@ -11,6 +11,7 @@ import { AuthsModule } from './apis/auths/auths.module';
 import { PointsTransactionsModule } from './apis/pointsTransactions/pointsTransactions.module';
 import { PaymentMoudle } from './apis/payment/payment.module';
 import { FilesModule } from './apis/files/files.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -29,6 +30,10 @@ import { FilesModule } from './apis/files/files.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
+      cors: {
+        origin: 'http://localhost:3000',
+        credentials: true,
+      },
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',
@@ -42,5 +47,6 @@ import { FilesModule } from './apis/files/files.module';
       logging: true,
     }),
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
