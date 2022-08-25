@@ -5,6 +5,9 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './commons/filter/http-exception.filter';
 
 async function bootstrap() {
+  console.log('==============================');
+  console.log('ccc');
+  console.log('==============================');
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
